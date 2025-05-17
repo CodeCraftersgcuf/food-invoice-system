@@ -1,0 +1,85 @@
+.dashboard-wrapper {
+  padding: 30px;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f4f6f8;
+  min-height: 100vh;
+}
+
+.dashboard-wrapper h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.receipt-form,
+.receipt-table {
+  background: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.receipt-form input,
+.receipt-form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.receipt-form button {
+  padding: 10px 16px;
+  background-color: #0069d9;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.receipt-form button:hover {
+  background-color: #0051a3;
+}
+
+.add-item-btn {
+  background-color: #28a745;
+  margin-bottom: 20px;
+}
+
+.add-item-btn:hover {
+  background-color: #218838;
+}
+
+.total {
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 10px;
+  text-align: right;
+}
+
+.receipt-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.receipt-table th,
+.receipt-table td {
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.receipt-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.download-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.download-link:hover {
+  text-decoration: underline;
+}

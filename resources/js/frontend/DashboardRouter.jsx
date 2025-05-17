@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useAuth from './hooks/useAuth';
+import CreateReceipt from './components/dashboard/CreateReceipt';
+import AdminReceipts from './components/dashboard/AdminReceipts';
 
 export default function DashboardRouter() {
   const { user } = useAuth();
@@ -7,20 +9,16 @@ export default function DashboardRouter() {
 
   useEffect(() => {
     if (!user) return;
-
-    if (user.role === 'admin') {
-      setView('admin');
-    } else {
-      setView('receipt');
-    }
+    if (user.role === 'admin') setView('admin');
+    else setView('create');
   }, [user]);
 
   if (!user) return <p>Loading...</p>;
 
-  return (
+return (
     <>
-      {view === 'admin' && <h1>Welcome Admin - Dashboard</h1>}
-      {view === 'receipt' && <h1>Create Receipt - Accountant View</h1>}
+{view === 'admin' && <AdminReceipts />}
+      {view === 'create' && <CreateReceipt />}
     </>
   );
 }
