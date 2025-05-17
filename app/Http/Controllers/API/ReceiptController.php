@@ -9,36 +9,39 @@ use Illuminate\Http\Request;
  use Barryvdh\DomPDF\Facade\Pdf;
 class ReceiptController extends Controller
 {
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'customer_name' => 'nullable|string',
-            'items' => 'required|array|min:1',
-            'items.*.item_name' => 'required|string',
-            'items.*.quantity' => 'required|integer|min:1',
-            'items.*.unit_price' => 'required|numeric|min:0',
+public function store(Request $request)
+{
+    $data = $request->validate([
+        'customer_name' => 'nullable|string',
+        'items' => 'required|array|min:1',
+        'items.*.item_name' => 'required|string',
+        'items.*.quantity' => 'required|integer|min:1',
+        'items.*.unit_price' => 'required|numeric|min:0',
+    ]);
+
+    $total = collect($data['items'])->sum(function ($item) {
+        return (int) $item['quantity'] * (float) $item['unit_price'];
+    });
+
+    $receipt = Receipt::create([
+        'customer_name' => $data['customer_name'],
+        'total_amount' => $total,
+        'created_by' => auth()->id(),
+    ]);
+
+    foreach ($data['items'] as $item) {
+        ReceiptItem::create([
+            'receipt_id' => $receipt->id,
+            'item_name' => $item['item_name'],
+            'quantity' => (int) $item['quantity'],
+            'unit_price' => (float) $item['unit_price'],
+            'total' => (int) $item['quantity'] * (float) $item['unit_price'],
         ]);
-
-        $total = collect($data['items'])->sum(fn($item) => $item['quantity'] * $item['unit_price']);
-
-        $receipt = Receipt::create([
-            'customer_name' => $data['customer_name'],
-            'total_amount' => $total,
-            'created_by' => auth()->id(),
-        ]);
-
-        foreach ($data['items'] as $item) {
-            ReceiptItem::create([
-                'receipt_id' => $receipt->id,
-                'item_name' => $item['item_name'],
-                'quantity' => $item['quantity'],
-                'unit_price' => $item['unit_price'],
-                'total' => $item['quantity'] * $item['unit_price'],
-            ]);
-        }
-
-        return response()->json(['message' => 'Receipt created', 'receipt_id' => $receipt->id]);
     }
+
+    return response()->json(['message' => 'Receipt created', 'receipt_id' => $receipt->id]);
+}
+
 
     public function index()
     {

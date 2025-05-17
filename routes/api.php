@@ -16,7 +16,7 @@ Route::middleware('auth:api')->group(function () {
 });
 Route::middleware('auth:api')->group(function () {
     Route::get('/receipts', [ReceiptController::class, 'index']); // admin list all
-   
+
     Route::post('/receipts', [ReceiptController::class, 'store']);
 
 });
