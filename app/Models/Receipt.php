@@ -11,7 +11,12 @@ class Receipt extends Model
 
     protected $fillable = [
         'customer_name',
+        'customer_email',
+        'customer_phone',
+        'customer_address',
         'total_amount',
+        'status',
+        'due_date',
         'created_by',
     ];
 
@@ -23,5 +28,10 @@ class Receipt extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 }

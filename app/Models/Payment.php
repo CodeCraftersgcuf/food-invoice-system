@@ -5,17 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ReceiptItem extends Model
+class Payment extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'receipt_id',
-        'item_name',
-        'description',
-        'quantity',
-        'unit_price',
-        'total',
+        'amount',
+        'payment_date',
+        'payment_method',
     ];
 
     public function receipt()

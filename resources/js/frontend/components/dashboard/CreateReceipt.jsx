@@ -4,9 +4,14 @@ import "./dashboard.css";
 
 export default function CreateReceipt() {
     const [items, setItems] = useState([
-        { item_name: "", quantity: 1, unit_price: 0 },
+        { item_name: "", description: "", quantity: 1, unit_price: 0 },
     ]);
     const [customer, setCustomer] = useState("");
+    const [customerEmail, setCustomerEmail] = useState("");
+    const [customerPhone, setCustomerPhone] = useState("");
+    const [customerAddress, setCustomerAddress] = useState("");
+    const [status, setStatus] = useState("unpaid");
+    const [dueDate, setDueDate] = useState("");
 
     const handleChange = (index, field, value) => {
         const updatedItems = [...items];
@@ -18,7 +23,7 @@ export default function CreateReceipt() {
     };
 
     const addItem = () => {
-        setItems([...items, { item_name: "", quantity: 1, unit_price: 0 }]);
+        setItems([...items, { item_name: "", description: "", quantity: 1, unit_price: 0 }]);
     };
 
     const total = items.reduce(
@@ -38,6 +43,7 @@ export default function CreateReceipt() {
             )
             .map((item) => ({
                 item_name: item.item_name.trim(),
+                description: item.description?.trim() || "",
                 quantity: parseInt(item.quantity),
                 unit_price: parseFloat(item.unit_price),
             }));
@@ -52,6 +58,11 @@ export default function CreateReceipt() {
                 "/api/receipts",
                 {
                     customer_name: customer.trim(),
+                    customer_email: customerEmail.trim(),
+                    customer_phone: customerPhone.trim(),
+                    customer_address: customerAddress.trim(),
+                    status,
+                    due_date: dueDate,
                     items: cleanedItems,
                 },
                 {
@@ -62,7 +73,12 @@ export default function CreateReceipt() {
             );
             alert("✅ Receipt Created! ID: " + res.data.receipt_id);
             setCustomer("");
-            setItems([{ item_name: "", quantity: 1, unit_price: 0 }]);
+            setCustomerEmail("");
+            setCustomerPhone("");
+            setCustomerAddress("");
+            setStatus("unpaid");
+            setDueDate("");
+            setItems([{ item_name: "", description: "", quantity: 1, unit_price: 0 }]);
         } catch (err) {
             console.error(err);
             alert("❌ Error creating receipt. Check console.");
@@ -79,20 +95,58 @@ export default function CreateReceipt() {
                     value={customer}
                     onChange={(e) => setCustomer(e.target.value)}
                 />
+                <label>Email</label>
+                <input
+                    placeholder="Customer Email"
+                    value={customerEmail}
+                    onChange={(e) => setCustomerEmail(e.target.value)}
+                />
+                <label>Phone</label>
+                <input
+                    placeholder="Customer Phone"
+                    value={customerPhone}
+                    onChange={(e) => setCustomerPhone(e.target.value)}
+                />
+                <label>Address</label>
+                <input
+                    placeholder="Customer Address"
+                    value={customerAddress}
+                    onChange={(e) => setCustomerAddress(e.target.value)}
+                />
+                <label>Status</label>
+                <select value={status} onChange={e => setStatus(e.target.value)}>
+                    <option value="unpaid">Unpaid</option>
+                    <option value="paid">Paid</option>
+                    <option value="overdue">Overdue</option>
+                </select>
+                <label>Due Date</label>
+                <input
+                    type="date"
+                    value={dueDate}
+                    onChange={e => setDueDate(e.target.value)}
+                />
 
                 <div className="table-header">
                     <span>Item Name</span>
+                    <span>Description</span>
                     <span>Quantity</span>
                     <span>Unit Price</span>
                 </div>
 
                 {items.map((item, i) => (
-                    <div key={i} className="item-row">
+                    <div key={i} className="item-row" style={{ display: "grid", gridTemplateColumns: "1fr 2fr 1fr 1fr", gap: "10px" }}>
                         <input
                             placeholder="Item Name"
                             value={item.item_name}
                             onChange={(e) =>
                                 handleChange(i, "item_name", e.target.value)
+                            }
+                        />
+                        <input
+                            placeholder="Description"
+                            value={item.description}
+                            onChange={(e) =>
+                                handleChange(i, "description", e.target.value)
                             }
                         />
                         <input

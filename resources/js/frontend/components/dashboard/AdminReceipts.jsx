@@ -34,6 +34,10 @@ export default function AdminReceipts() {
                             <tr>
                                 <th>ID</th>
                                 <th>Customer</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Status</th>
+                                <th>Due Date</th>
                                 <th>Total</th>
                                 <th>Created</th>
                                 <th>Download</th>
@@ -44,6 +48,10 @@ export default function AdminReceipts() {
                                 <tr key={r.id}>
                                     <td>{r.id}</td>
                                     <td>{r.customer_name}</td>
+                                    <td>{r.customer_email}</td>
+                                    <td>{r.customer_phone}</td>
+                                    <td>{r.status}</td>
+                                    <td>{r.due_date}</td>
                                     <td>${r.total_amount}</td>
                                     <td>{new Date(r.created_at).toLocaleString()}</td>
                                     <td>
