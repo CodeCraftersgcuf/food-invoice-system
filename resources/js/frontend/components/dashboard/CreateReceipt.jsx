@@ -4,7 +4,7 @@ import "./dashboard.css";
 
 export default function CreateReceipt() {
     const [items, setItems] = useState([
-        { item_name: "", description: "", quantity: 1, unit_price: 0 },
+        { item_name: "", quantity: 1, unit_price: 0 },
     ]);
     const [customer, setCustomer] = useState("");
     const [customerEmail, setCustomerEmail] = useState("");
@@ -12,6 +12,7 @@ export default function CreateReceipt() {
     const [customerAddress, setCustomerAddress] = useState("");
     const [status, setStatus] = useState("unpaid");
     const [dueDate, setDueDate] = useState("");
+    const [paymentMethod, setPaymentMethod] = useState("cash");
 
     const handleChange = (index, field, value) => {
         const updatedItems = [...items];
@@ -23,7 +24,7 @@ export default function CreateReceipt() {
     };
 
     const addItem = () => {
-        setItems([...items, { item_name: "", description: "", quantity: 1, unit_price: 0 }]);
+        setItems([...items, { item_name: "", quantity: 1, unit_price: 0 }]);
     };
 
     const total = items.reduce(
@@ -43,7 +44,7 @@ export default function CreateReceipt() {
             )
             .map((item) => ({
                 item_name: item.item_name.trim(),
-                description: item.description?.trim() || "",
+                // description is omitted
                 quantity: parseInt(item.quantity),
                 unit_price: parseFloat(item.unit_price),
             }));
@@ -64,6 +65,7 @@ export default function CreateReceipt() {
                     status,
                     due_date: dueDate,
                     items: cleanedItems,
+                    payment_method: paymentMethod,
                 },
                 {
                     headers: {
@@ -78,7 +80,8 @@ export default function CreateReceipt() {
             setCustomerAddress("");
             setStatus("unpaid");
             setDueDate("");
-            setItems([{ item_name: "", description: "", quantity: 1, unit_price: 0 }]);
+            setPaymentMethod("cash");
+            setItems([{ item_name: "", quantity: 1, unit_price: 0 }]);
         } catch (err) {
             console.error(err);
             alert("❌ Error creating receipt. Check console.");
@@ -125,16 +128,23 @@ export default function CreateReceipt() {
                     value={dueDate}
                     onChange={e => setDueDate(e.target.value)}
                 />
+                <label>Payment Method</label>
+                <select value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
+                    <option value="cash">Cash</option>
+                    <option value="credit_card">Credit Card</option>
+                    <option value="bank_transfer">Bank Transfer</option>
+                    <option value="paypal">PayPal</option>
+                </select>
 
                 <div className="table-header">
                     <span>Item Name</span>
-                    <span>Description</span>
+                    {/* Description removed */}
                     <span>Quantity</span>
                     <span>Unit Price</span>
                 </div>
 
                 {items.map((item, i) => (
-                    <div key={i} className="item-row" style={{ display: "grid", gridTemplateColumns: "1fr 2fr 1fr 1fr", gap: "10px" }}>
+                    <div key={i} className="item-row" style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: "10px" }}>
                         <input
                             placeholder="Item Name"
                             value={item.item_name}
@@ -142,13 +152,7 @@ export default function CreateReceipt() {
                                 handleChange(i, "item_name", e.target.value)
                             }
                         />
-                        <input
-                            placeholder="Description"
-                            value={item.description}
-                            onChange={(e) =>
-                                handleChange(i, "description", e.target.value)
-                            }
-                        />
+                        {/* Description input removed */}
                         <input
                             type="number"
                             placeholder="Qty"

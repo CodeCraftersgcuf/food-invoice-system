@@ -7,6 +7,7 @@ const currentPath = window.location.pathname;
 
 const App = () => {
   if (currentPath === '/dashboard') return <DashboardRouter />;
+  if (currentPath === '/manage') return <DashboardRouter />; // <-- Add this line
   if (currentPath === '/register') return <Register onSwitch={() => window.location.href = '/'} />;
   return <Login onSwitch={() => window.location.href = '/register'} />;
 };

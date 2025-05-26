@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useAuth from './hooks/useAuth';
 import CreateReceipt from './components/dashboard/CreateReceipt';
 import AdminReceipts from './components/dashboard/AdminReceipts';
+import ManageDashboard from './components/dashboard/ManageDashboard';
 
 export default function DashboardRouter() {
   const { user } = useAuth();
@@ -9,16 +10,21 @@ export default function DashboardRouter() {
 
   useEffect(() => {
     if (!user) return;
-    if (user.role === 'admin') setView('admin');
+    if (window.location.pathname === '/manage') setView('manage');
+    else if (user.role === 'admin') setView('admin');
     else setView('create');
   }, [user]);
 
   if (!user) return <p>Loading...</p>;
 
-return (
+  return (
     <>
-{view === 'admin' && <AdminReceipts />}
+      {view === 'manage' && <ManageDashboard />}
+      {view === 'admin' && <AdminReceipts />}
       {view === 'create' && <CreateReceipt />}
+      <div style={{ marginTop: 20 }}>
+        <a href="/manage">Go to Management Dashboard</a>
+      </div>
     </>
   );
 }

@@ -26,6 +26,7 @@ class ReceiptController extends Controller
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.unit_price' => 'required|numeric|min:0',
             'created_by' => 'nullable', // allow created_by from request if not using auth
+            'payment_method' => 'nullable|string|in:cash,credit_card,bank_transfer,paypal',
         ]);
 
         // Find or create client
@@ -77,7 +78,7 @@ class ReceiptController extends Controller
             'receipt_id' => $receipt->id,
             'amount' => $grandTotal,
             'payment_date' => now(),
-            'payment_method' => 'Cash', // or get from request
+            'payment_method' => $data['payment_method'] ?? 'cash',
         ]);
 
         return response()->json(['message' => 'Receipt created', 'receipt_id' => $receipt->id]);
