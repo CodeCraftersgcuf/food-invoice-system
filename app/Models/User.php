@@ -33,4 +33,14 @@ class User extends Authenticatable implements JWTSubject
             'password' => 'hashed',
         ];
     }
+
+    public function receipts()
+    {
+        return $this->hasMany(Receipt::class, 'created_by');
+    }
+
+    public function settings()
+    {
+        return $this->hasMany(Setting::class);
+    }
 }

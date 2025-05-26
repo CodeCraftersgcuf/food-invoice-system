@@ -21,6 +21,8 @@ return new class extends Migration {
             $table->date('due_date')->nullable();
             $table->unsignedBigInteger('created_by'); // user_id
             $table->timestamps();
+
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
