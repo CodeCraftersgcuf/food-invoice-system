@@ -18,6 +18,7 @@ class Receipt extends Model
         'status',
         'due_date',
         'created_by',
+        'client_id', // add client_id
     ];
 
     public function items()
@@ -25,13 +26,18 @@ class Receipt extends Model
         return $this->hasMany(ReceiptItem::class);
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function payments()
+    public function client()
     {
-        return $this->hasMany(Payment::class);
+        return $this->belongsTo(Client::class);
     }
 }

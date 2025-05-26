@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('client_id')->nullable(); // <-- Add this line
             $table->string('customer_name')->nullable();
             $table->string('customer_email')->nullable();
             $table->string('customer_phone')->nullable();
@@ -23,6 +24,7 @@ return new class extends Migration {
             $table->timestamps();
 
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('set null'); // <-- Add this line
         });
     }
 
